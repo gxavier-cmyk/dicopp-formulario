@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Questionário DICOPP – Tribunal de Contas do Estado da Paraíba</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Source+Sans+3:wght@300;400;600;700&display=swap');
+
+  :root {
+    --azul-tcpb: #003366;
+    --azul-medio: #1a4f8a;
+    --azul-claro: #e8f0fa;
+    --dourado: #b8860b;
+    --dourado-claro: #f5e9c0;
+    --verde: #1a6b3c;
+    --verde-claro: #d4edda;
+    --vermelho: #8b1a1a;
+    --vermelho-claro: #fce8e8;
+    --alerta: #7a5000;
+    --alerta-bg: #fff3cd;
+    --alerta-borda: #f0ad4e;
+    --cinza-borda: #c8d4e0;
+    --cinza-bg: #f4f7fb;
+    --texto: #1a2638;
+    --texto-leve: #4a5a6e;
+    --branco: #ffffff;
+    --sombra: 0 2px 12px rgba(0,51,102,0.10);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: #dce6f0;
+    color: var(--texto);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, var(--azul-tcpb) 0%, var(--azul-medio) 100%);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 3px 16px rgba(0,0,0,0.22);
+  }
+  .header-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .header-icon {
+    width: 52px;
+    height: 52px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    flex-shrink: 0;
+    border: 2px solid rgba(255,255,255,0.25);
+  }
+  .header-text h1 {
+    font-family: 'Merriweather', serif;
+    font-size: 1.1rem;
+    color: #fff;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+  .header-text p {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.7);
+    margin-top: 3px;
+  }
+
+  /* PROGRESS BAR */
+  .progress-bar-wrap {
+    background: rgba(255,255,255,0.15);
+    height: 4px;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--dourado);
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  /* MAIN */
+  main {
+    max-width: 900px;
+    margin: 36px auto 60px;
+    padding: 0 20px;
+  }
+
+  /* OBS GERAL */
+  .obs-geral {
+    background: var(--azul-claro);
+    border-left: 4px solid var(--azul-medio);
+    border-radius: 8px;
+    padding: 14px 20px;
+    margin-bottom: 28px;
+    font-size: 0.92rem;
+    color: var(--azul-tcpb);
+    line-height: 1.5;
+  }
+  .obs-geral strong { font-weight: 700; }
+
+  /* SECTION */
+  .section {
+    background: var(--branco);
+    border-radius: 12px;
+    box-shadow: var(--sombra);
+    margin-bottom: 28px;
+    overflow: hidden;
+    border: 1px solid var(--cinza-borda);
+  }
+  .section-header {
+    background: linear-gradient(90deg, var(--azul-tcpb), var(--azul-medio));
+    color: #fff;
+    padding: 14px 24px;
+    font-family: 'Merriweather', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-number {
+    background: rgba(255,255,255,0.18);
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.82rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .section-body { padding: 0; }
+
+  /* QUESTION */
+  .question-block {
+    padding: 20px 24px 18px;
+    border-bottom: 1px solid #eef2f7;
+    transition: background 0.2s;
+  }
+  .question-block:last-child { border-bottom: none; }
+  .question-block.hidden { display: none; }
+  .question-block.subitem {
+    background: var(--cinza-bg);
+    border-left: 3px solid var(--dourado);
+  }
+
+  .question-label {
+    font-size: 0.97rem;
+    line-height: 1.6;
+    margin-bottom: 14px;
+    color: var(--texto);
+  }
+  .question-code {
+    font-weight: 700;
+    color: var(--azul-tcpb);
+    margin-right: 6px;
+  }
+
+  /* YES/NO BUTTONS */
+  .yn-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+    flex-wrap: wrap;
+  }
+  .btn-yn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 22px;
+    border-radius: 6px;
+    border: 2px solid transparent;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s;
+    background: var(--cinza-bg);
+    color: var(--texto-leve);
+    border-color: var(--cinza-borda);
+  }
+  .btn-yn:hover { transform: translateY(-1px); box-shadow: 0 3px 8px rgba(0,0,0,0.12); }
+  .btn-yn.sim.selected {
+    background: var(--verde);
+    color: #fff;
+    border-color: var(--verde);
+    box-shadow: 0 2px 8px rgba(26,107,60,0.3);
+  }
+  .btn-yn.nao.selected {
+    background: var(--vermelho);
+    color: #fff;
+    border-color: var(--vermelho);
+    box-shadow: 0 2px 8px rgba(139,26,26,0.3);
+  }
+  .btn-yn.sim:not(.selected):hover { border-color: var(--verde); color: var(--verde); }
+  .btn-yn.nao:not(.selected):hover { border-color: var(--vermelho); color: var(--vermelho); }
+
+  /* OPEN TEXT */
+  .open-text-wrap { margin-top: 12px; }
+  .open-text-wrap textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 10px 14px;
+    border: 2px solid var(--cinza-borda);
+    border-radius: 6px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.92rem;
+    color: var(--texto);
+    resize: vertical;
+    background: var(--cinza-bg);
+    transition: border-color 0.2s;
+  }
+  .open-text-wrap textarea:focus { outline: none; border-color: var(--azul-medio); background: #fff; }
+
+  /* ALERTA PLANILHA */
+  .alerta-planilha {
+    background: var(--alerta-bg);
+    border: 1px solid var(--alerta-borda);
+    border-left: 4px solid var(--alerta);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .alerta-planilha .icone { font-size: 1.4rem; flex-shrink: 0; margin-top: 1px; }
+  .alerta-planilha .texto { font-size: 0.92rem; color: var(--alerta); line-height: 1.55; }
+  .alerta-planilha .texto strong { font-weight: 700; }
+  .alerta-confirmacao {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .alerta-confirmacao input[type=checkbox] { width: 16px; height: 16px; cursor: pointer; }
+  .alerta-confirmacao label { font-size: 0.88rem; color: var(--alerta); font-weight: 600; cursor: pointer; }
+
+  /* UPLOAD PDF */
+  .upload-wrap {
+    margin-top: 14px;
+    border: 2px dashed var(--cinza-borda);
+    border-radius: 8px;
+    padding: 16px 18px;
+    background: var(--azul-claro);
+    transition: border-color 0.2s;
+  }
+  .upload-wrap:hover { border-color: var(--azul-medio); }
+  .upload-label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--azul-tcpb);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .upload-desc {
+    font-size: 0.82rem;
+    color: var(--texto-leve);
+    margin-bottom: 10px;
+    font-style: italic;
+  }
+  .upload-btn-wrap { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .upload-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 18px;
+    background: var(--azul-tcpb);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .upload-btn:hover { background: var(--azul-medio); }
+  .upload-file-input { display: none; }
+  .upload-filelist { margin-top: 8px; }
+  .upload-file-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--verde);
+    padding: 4px 0;
+  }
+  .upload-file-item .remove-file {
+    cursor: pointer;
+    color: var(--vermelho);
+    font-size: 1rem;
+    background: none;
+    border: none;
+    padding: 0 4px;
+    font-weight: 700;
+    transition: opacity 0.2s;
+  }
+  .upload-file-item .remove-file:hover { opacity: 0.6; }
+
+  /* CONDICIONANTE TAG */
+  .cond-tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  .cond-sim { background: var(--verde-claro); color: var(--verde); }
+  .cond-nao { background: var(--vermelho-claro); color: var(--vermelho); }
+
+  /* OBS block */
+  .obs-block {
+    background: #f0f4fa;
+    border-left: 3px solid var(--azul-medio);
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin: 12px 0;
+    font-size: 0.87rem;
+    color: var(--texto-leve);
+    line-height: 1.55;
+    font-style: italic;
+  }
+
+  /* SUBMIT */
+  .form-footer {
+    text-align: center;
+    margin-top: 36px;
+    padding: 28px;
+    background: var(--branco);
+    border-radius: 12px;
+    box-shadow: var(--sombra);
+    border: 1px solid var(--cinza-borda);
+  }
+  .btn-submit {
+    padding: 14px 44px;
+    background: linear-gradient(135deg, var(--azul-tcpb), var(--azul-medio));
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Merriweather', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 3px 12px rgba(0,51,102,0.3);
+    letter-spacing: 0.03em;
+  }
+  .btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,51,102,0.35);
+  }
+  .form-footer p {
+    margin-top: 12px;
+    font-size: 0.82rem;
+    color: var(--texto-leve);
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,20,50,0.6);
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal-box {
+    background: #fff;
+    border-radius: 12px;
+    padding: 32px;
+    max-width: 460px;
+    width: 90%;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    text-align: center;
+  }
+  .modal-icon { font-size: 3rem; margin-bottom: 14px; }
+  .modal-title { font-family: 'Merriweather', serif; font-size: 1.1rem; color: var(--azul-tcpb); margin-bottom: 10px; font-weight: 700; }
+  .modal-text { font-size: 0.92rem; color: var(--texto-leve); line-height: 1.55; margin-bottom: 22px; }
+  .modal-btn {
+    padding: 10px 28px;
+    background: var(--azul-tcpb);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Source Sans 3', sans-serif;
+  }
+  .modal-btn:hover { background: var(--azul-medio); }
+
+  @media (max-width: 600px) {
+    .header-inner { padding: 14px 16px; }
+    main { margin: 18px auto 40px; padding: 0 10px; }
+    .question-block { padding: 14px 14px 12px; }
+    .section-header { padding: 12px 14px; font-size: 0.88rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-icon">⚖️</div>
+    <div class="header-text">
+      <h1>Solicitação de Documentos e Informações – DICOPP</h1>
+      <p>Tribunal de Contas do Estado da Paraíba &nbsp;·&nbsp; Auditoria de Controle Externo</p>
+    </div>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressBar"></div></div>
+</header>
+
+<main>
+  <div class="obs-geral">
+    <strong>⚠️ Observação geral:</strong> Caso a gestão municipal não tenha acesso a informações de um ou mais indicadores de um determinado período inquirido neste ofício, por favor escreva quais informações, indicadores e períodos não estão disponíveis e o motivo disso.
+  </div>
+
+  <!-- IDENTIFICAÇÃO -->
+  <div class="section" style="margin-bottom:28px">
+    <div class="section-header">
+      <span class="section-number">🏛</span>
+      Identificação do Município
+    </div>
+    <div class="section-body">
+      <div class="question-block">
+        <label style="font-weight:700;font-size:0.92rem;color:var(--azul-tcpb);display:block;margin-bottom:8px">Nome do Município *</label>
+        <input id="municipioInput" type="text" placeholder="Ex: Campina Grande" required
+          style="width:100%;padding:10px 14px;border:2px solid var(--cinza-borda);border-radius:6px;font-family:'Source Sans 3',sans-serif;font-size:0.95rem;background:var(--cinza-bg);color:var(--texto)">
+        <label style="font-weight:700;font-size:0.92rem;color:var(--azul-tcpb);display:block;margin:16px 0 8px">Nome do Responsável pelo preenchimento *</label>
+        <input id="responsavelInput" type="text" placeholder="Nome completo"
+          style="width:100%;padding:10px 14px;border:2px solid var(--cinza-borda);border-radius:6px;font-family:'Source Sans 3',sans-serif;font-size:0.95rem;background:var(--cinza-bg);color:var(--texto)">
+        <label style="font-weight:700;font-size:0.92rem;color:var(--azul-tcpb);display:block;margin:16px 0 8px">Cargo / Função</label>
+        <input id="cargoInput" type="text" placeholder="Ex: Secretária Municipal de Educação"
+          style="width:100%;padding:10px 14px;border:2px solid var(--cinza-borda);border-radius:6px;font-family:'Source Sans 3',sans-serif;font-size:0.95rem;background:var(--cinza-bg);color:var(--texto)">
+      </div>
+    </div>
+  </div>
+
+  <form id="mainForm">
+
+    <!-- ===================== SEÇÃO 1 ===================== -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-number">1</span>
+        Avaliações Diagnósticas nos anos iniciais do ensino fundamental
+      </div>
+      <div class="section-body">
+
+        <!-- 1.a PLANILHA -->
+        <div class="question-block subitem" id="q1a">
+          <div class="alerta-planilha">
+            <div class="icone">📋</div>
+            <div class="texto">
+              <strong>Atenção – Planilha Indicadores (Aba 1A):</strong> Informe na <strong>aba 1A</strong> da planilha <strong>Indicadores</strong> (enviada por e-mail) as avaliações diagnósticas aplicadas (incluindo as provas do Compromisso Nacional Criança Alfabetizada, SAEB/INEP, Prova do Estado/SIAVE-PB, avaliações próprias e outras) em cada ano/série do ensino fundamental, com o respectivo percentual de alunos avaliados, por semestre (base: 1º e 2º semestre de 2025).
+              <div class="alerta-confirmacao">
+                <input type="checkbox" id="check1a" onchange="updateProgress()">
+                <label for="check1a">Já preenchi a aba 1A da planilha Indicadores</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1.b -->
+        <div class="question-block" id="q1b">
+          <div class="question-label">
+            <span class="question-code">1.b</span>
+            A Secretaria de Educação pretende aplicar avaliações diagnósticas no 1º semestre de 2026?
+            <span class="cond-tag cond-sim">SIM → 1.b.1</span>
+            <span class="cond-tag cond-nao">NÃO → 1.c</span>
+          </div>
+          <div class="yn-group">
+            <button type="button" class="btn-yn sim" onclick="selectYN(this,'q1b','sim',['q1b1'],['q1c'])">✔ Sim</button>
+            <button type="button" class="btn-yn nao" onclick="selectYN(this,'q1b','nao',['q1c'],['q1b1'])">✘ Não</button>
+          </div>
+        </div>
+
+        <!-- 1.b.1 -->
+        <div class="question-block hidden" id="q1b1">
+          <div class="question-label">
+            <span class="question-code">1.b.1</span>
+            Quais avaliações e para quais anos?
+          </div>
+          <div class="open-text-wrap">
+            <textarea placeholder="Descreva as avaliações previstas e os respectivos anos/séries..."></textarea>
+          </div>
+          <div class="upload-wrap" style="margin-top:16px">
+            <div class="upload-label">📎 Documento comprobatório</div>
+            <div class="upload-desc">Calendário de aplicação das avaliações diagnósticas 2026</div>
+            <div class="upload-btn-wrap">
+              <button type="button" class="upload-btn" onclick="triggerUpload('upload1b1')">📂 Selecionar PDF</button>
+              <input type="file" id="upload1b1" class="upload-file-input" accept=".pdf" multiple onchange="handleFiles(this,'list1b1')">
+              <span style="font-size:0.8rem;color:var(--texto-leve)">Somente arquivos .PDF</span>
+            </div>
+            <div class="upload-filelist" id="list1b1"></div>
+          </div>
+        </div>
+
+        <!-- 1.c -->
+        <div class="question-block hidden" id="q1c">
+          <div class="question-label">
+            <span class="question-code">1.c</span>
+            A Secretaria de Educação produz relatórios com os dados obtidos pelas avaliações diagnósticas, com informações desagregadas por descritor, escola e turma?
+            <span class="cond-tag cond-sim">SIM → 1.c.1</span>
+            <span class="cond-tag cond-nao">NÃO → 1.d</span>
+          </div>
+          <div class="yn-group">
+            <button type="button" class="btn-yn sim" onclick="selectYN(this,'q1c','sim',['q1c1'],['q1d'])">✔ Sim</button>
+            <button type="button" class="btn-yn nao" onclick="selectYN(this,'q1c','nao',['q1d'],['q1c1'])">✘ Não</button>
+          </div>
+        </div>
+
+        <!-- 1.c.1 -->
+        <div class="question-block hidden" id="q1c1">
+          <div class="question-label">
+            <span class="question-code">1.c.1</span>
+            Eles são encaminhados para os gestores das escolas?
+          </div>
+          <div class="yn-group">
+            <button type="button" class="btn-yn sim" onclick="selectYN(this,'q1c1','sim',[],[])">✔ Sim</button>
+            <button type="button" class="btn-yn nao" onclick="selectYN(this,'q1c1','nao',[],[])">✘ Não</button>
+          </div>
+          <div class="upload-wrap" style="margin-top:16px">
+            <div class="upload-label">📎 Documentos comprobatórios</div>
+            <div class="upload-desc">Exemplos de relatórios analíticos com informações de aprendizagem produzidos com cada avaliação diagnóstica aplicada, encaminhados a uma escola da rede municipal</div>
+            <div class="upload-btn-wrap">
+              <button type="button" class="upload-btn" onclick="triggerUpload('upload1c1')">📂 Selecionar PDF(s)</button>
+              <input type="file" id="upload1c1" class="upload-file-input" accept=".pdf" multiple onchange="handleFiles(this,'list1c1')">
+              <span style="font-size:0.8rem;color:var(--texto-leve)">Somente arquivos .PDF</span>
+            </div>
+            <div class="upload-filelist" id="list1c1"></div>
+          </div>
+        </div>
+
+        <!-- 1.d PLANILHA -->
+        <div class="question-block subitem hidden" id="q1d">
+          <div class="alerta-planilha">
+            <div class="icone">📋</div>
+            <div class="texto">
+              <strong>Atenção – Planilha Indicadores (Aba 1D):</strong> Informe na <strong>aba 1D</strong> da planilha <strong>Indicadores</strong> os dois descritores (e respectivos percentuais de acerto) nas disciplinas de Língua Portuguesa e Matemática em que os alunos apresentaram mais dificuldades em cada ano/série, por semestre (base: 1º e 2º semestres de 2025).
+              <div class="alerta-confirmacao">
+                <input type="checkbox" id="check1d" onchange="updateProgress()">
+                <label for="check1d">Já preenchi a aba 1D da planilha Indicadores</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1.e -->
+        <div class="question-block" id="q1e">
+          <div class="question-label">
+            <span class="question-code">1.e</span>
+            Há algum ato normativo que regulamente a aplicação das avaliações diagnósticas?
+          </div>
+          <div class="yn-group">
+            <button type="button" class="btn-yn sim" onclick="selectYN(this,'q1e','sim',[],[])">✔ Sim</button>
+            <button type="button" class="btn-yn nao" onclick="selectYN(this,'q1e','nao',[],[])">✘ Não</button>
+          </div>
+          <div class="upload-wrap" style="margin-top:16px">
+            <div class="upload-label">📎 Documento comprobatório</div>
+            <div class="upload-desc">Ato normativo sobre o tema em questão</div>
+            <div class="upload-btn-wrap">
+              <button type="button" class="upload-btn" onclick="triggerUpload('upload1e')">📂 Selecionar PDF</button>
+              <input type="file" id="upload1e" class="upload-file-input" accept=".pdf" multiple onchange="handleFiles(this,'list1e')">
+              <span style="font-size:0.8rem;color:var(--texto-leve)">Somente arquivos .PDF</span>
+            </div>
+            <div class="upload-filelist" id="list1e"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===================== SEÇÃO 2 ===================== -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-number">2</span>
+        Estabelecimento de Metas de Desempenho
+      </div>
+      <div class="section-body">
+
+        <!-- 2.a -->
+        <div class="question-block" id="q2a">
+          <div class="question-label">
+            <span class="question-code">2.a</span>
+            A Secretaria Municipal da Educação estabelece metas de desempenho para as escolas da sua rede de ensino com base nos resultados das avaliações diagnósticas aplicadas, desagregados por ano?
+          </div>
+          <div class="yn-group">
+            <button type="button" class="btn-yn sim" onclick="selectYN(this,'q2a','sim',[],[])">✔ Sim</button>
+            <button type="button" class="btn-yn nao" onclick="selectYN(this,'q2a','nao',[],[])">✘ Não</button>
+          </div>
+          <div class="upload-wrap" style="margin-top:16px">
+            <div class="upload-label">📎 Documento comprobatório</div>
+            <div class="upload-desc">Plano com metas para desempenho das escolas nas avaliações diagnósticas para o ano de 2025</div>
+            <div class="upload-btn-wrap">
+              <button type="button" class="upload-btn" onclick="triggerUpload('upload2a')">📂 Selecionar PDF</button>
+              <input type="file" id="upload2a" class="upload-file-input" accept=".pdf" multiple onchange="handleFiles(this,'list2a')">
+              <span style="font-size:0.8rem;color:var(--texto-leve)">Somente arquivos .PDF</span>
+            </div>
+            <div class="upload-filelist" id="list2a"></div>
+          </div>
+        </div>
+
+        <!-- 2.b -->
+        <div class="question-block" id="q2b">
+          <div class="question-label">
+            <span class="question-code">2.b</span>
+            A Secretaria Municipal da Educação disponibiliza modelos para que os gestores escolares elaborem os seus planos de ação (e/ou de gestão)?
+          </div>
+          <div class="yn-group">
+            <button type="button" class="btn-yn sim" onclick="selectYN(this,'q2b','sim',[],[])">✔ Sim</button>
+            <button type="button" class="btn-yn nao" onclick="selectYN(this,'q2b','nao',[],[])">✘ Não</button>
+          </div>
+          <div class="upload-wrap" style="margin-top:16px">
+            <div class="upload-label">📎 Documento comprobatório</div>
+            <div class="upload-desc">Modelo de plano de ação/gestão das escolas da rede municipal de ensino</div>
+            <div class="upload-btn-wrap">
+              <button type="button" class="upload-btn" onclick="triggerUpload('upload2b')">📂 Selecionar PDF</button>
+              <input type="file" id="upload2b" class="upload-file-input" accept=".pdf" multiple onchange="handleFiles(this,'list2b')">
+              <span style="font-size:0.8rem;color:var(--texto-leve)">Somente arquivos .PDF</span>
+            </div>
+            <div class="upload-filelist" id="list2b"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===================== SEÇÃO 3 ===================== -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-number">3</span>
+        Acompanhamento Pedagógico
+      </div>
+      <div class="section-body">
+
+        <!-- 3.a PLANILHA -->
+        <div class="question-block subitem" id="q3a">
+          <div class="alerta-planilha">
+            <div class="icone">📋</div>
+            <div class="texto">
+              <strong>Atenção – Planilha Indicadores (Aba 3A):</strong> Informe na <strong>aba 3A</strong> da planilha <strong>Indicadores</strong> o(s) profissional(is) responsável(is) pelo acompanhamento pedagógico de cada escola de ensino fundamental da rede municipal e a respectiva quantidade de visitas de acompanhamento realizadas, por semestre (base: 2º semestre de 2025). <em>Desconsiderar visitas realizadas apenas para atender demandas pontuais.</em>
+              <div class="alerta-confirmacao">
+                <input type="checkbox" id="check3a" onchange="updateProgress()">
+                <label for="check3a">Já preenchi a aba 3A da planilha Indicadores</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3.b -->
+        <div class="question-block" id="q3b">
+          <div class="question-label">
+            <span class="question-code">3.b</span>
+            A Secretaria da Educação possui um cronograma de visitas previstas de acompanhamento pedagógico para o 1º semestre de 2026?
+          </div>
+          <div class="yn-group">
+            <button type="button" class="btn-yn sim" onclick="selectYN(this,'q3b','sim',[],[])">✔ Sim</button>
+            <button type="button" class="btn-yn nao" onclick="selectYN(this,'q3b','nao',[],[])">✘ Não</button>
+          </div>
+          <div class="upload-wrap" style="margin-top:16px">
+            <div class="upload-label">📎 Documento comprobatório</div>
+            <div class="upload-desc">Cronograma de visitas de acompanhamento</div>
+            <div class="upload-btn-wrap">
+              <button type="button" class="upload-btn" onclick="triggerUpload('upload3b')">📂 Selecionar PDF</button>
+              <input type="file" id="upload3b" class="upload-file-input" accept=".pdf" multiple onchange="handleFiles(this,'list3b')">
+              <span style="font-size:0.8rem;color:var(--texto-leve)">Somente arquivos .PDF</span>
+            </div>
+            <div class="upload-filelist" id="list3b"></div>
+          </div>
+        </div>
+
+        <!-- 3.c PLANILHA -->
+        <div class="question-block subitem" id="q3c">
+          <div class="alerta-planilha">
+            <div class="icone">📋</div>
+            <div class="texto">
+              <strong>Atenção – Planilha Indicadores (Aba 3C):</strong> Informe na <strong>aba 3C</strong> da planilha <strong>Indicadores</strong> a quantidade de devolutivas por escrito entregues pela equipe de acompanhamento pedagógico às escolas após a realização das visitas, por semestre (base: 2º semestre de 2025).
+              <div class="alerta-confirmacao">
+                <input type="checkbox" id="check3c" onchange="updateProgress()">
+                <label for="check3c">Já preenchi a aba 3C da planilha Indicadores</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3.d -->
+        <div class="question-block" id="q3d">
+          <div class="question-label">
+            <span class="question-code">3.d</span>
+            Há ato normativo que estabeleça as atribuições da equipe de acompanhamento escolar?
+          </div>
+          <div class="yn-group">
+            <button type="button" class="btn-yn sim" onclick="selectYN(this,'q3d','sim',[],[])">✔ Sim</button>
+            <button type="button" class="btn-yn nao" onclick="selectYN(this,'q3d','nao',[],[])">✘ Não</button>
+          </div>
+          <div class="upload-wrap" style="margin-top:16px">
+            <div class="upload-label">📎 Documento comprobatório</div>
+            <div class="upload-desc">Ato normativo sobre o tema em questão</div>
+            <div class="upload-btn-wrap">
+              <button type="button" class="upload-btn" onclick="triggerUpload('upload3d')">📂 Selecionar PDF</button>
+              <input type="file" id="upload3d" class="upload-file-input" accept=".pdf" multiple onchange="handleFiles(this,'list3d')">
+              <span style="font-size:0.8rem;color:var(--texto-leve)">Somente arquivos .PDF</span>
+            </div>
+            <div class="upload-filelist" id="list3d"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===================== SEÇÃO 4 ===================== -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-number">4</span>
+        Organização do Currículo com Sequência de Objetivos de Aprendizagem
+      </div>
+      <div class="section-body">
+
+        <!-- 4.a -->
+        <div class="question-block" id="q4a">
+          <div class="question-label">
+            <span class="question-code">4.a</span>
+            A Secretaria Municipal da Educação organiza os objetivos de aprendizagem esperados por período letivo (trimestre, bimestre, mês ou quinzena) das disciplinas de língua portuguesa e matemática em cada ano do ensino fundamental?
+          </div>
+          <div class="yn-group">
+            <button type="button" class="btn-yn sim" onclick="selectYN(this,'q4a','sim',[],[])">✔ Sim</button>
+            <button type="button" class="btn-yn nao" onclick="selectYN(this,'q4a','nao',[],[])">✘ Não</button>
+          </div>
+          <div class="upload-wrap" style="margin-top:16px">
+            <div class="upload-label">📎 Documento comprobatório</div>
+            <div class="upload-desc">Objetivos de aprendizagem esperados por período letivo das disciplinas de língua portuguesa e matemática em todas as séries dos anos iniciais do ensino fundamental</div>
+            <div class="upload-btn-wrap">
+              <button type="button" class="upload-btn" onclick="triggerUpload('upload4a')">📂 Selecionar PDF</button>
+              <input type="file" id="upload4a" class="upload-file-input" accept=".pdf" multiple onchange="handleFiles(this,'list4a')">
+              <span style="font-size:0.8rem;color:var(--texto-leve)">Somente arquivos .PDF</span>
+            </div>
+            <div class="upload-filelist" id="list4a"></div>
+          </div>
+        </div>
+
+        <!-- 4.b -->
+        <div class="question-block" id="q4b">
+          <div class="question-label">
+            <span class="question-code">4.b</span>
+            Com base no Currículo utilizado pela rede municipal, a Secretaria Municipal da Educação definiu as habilidades priorizadas e respectivas expectativas de aprendizagem, nos moldes propostos pela Matriz Curricular Priorizada do Pacto Nacional de Recomposição de Aprendizagens (MEC)?
+          </div>
+          <div class="yn-group">
+            <button type="button" class="btn-yn sim" onclick="selectYN(this,'q4b','sim',[],[])">✔ Sim</button>
+            <button type="button" class="btn-yn nao" onclick="selectYN(this,'q4b','nao',[],[])">✘ Não</button>
+          </div>
+          <div class="upload-wrap" style="margin-top:16px">
+            <div class="upload-label">📎 Documento comprobatório</div>
+            <div class="upload-desc">Matriz Curricular Priorizada da Secretaria Municipal da Educação</div>
+            <div class="upload-btn-wrap">
+              <button type="button" class="upload-btn" onclick="triggerUpload('upload4b')">📂 Selecionar PDF</button>
+              <input type="file" id="upload4b" class="upload-file-input" accept=".pdf" multiple onchange="handleFiles(this,'list4b')">
+              <span style="font-size:0.8rem;color:var(--texto-leve)">Somente arquivos .PDF</span>
+            </div>
+            <div class="upload-filelist" id="list4b"></div>
+          </div>
+        </div>
+
+        <!-- 4.c -->
+        <div class="question-block" id="q4c">
+          <div class="question-label">
+            <span class="question-code">4.c</span>
+            A Secretaria Municipal de Educação elabora e disponibiliza rotinas pedagógicas para os professores da rede municipal de ensino, com os objetivos de aprendizagem esperados e sugestões de atividades organizados por quinzena e/ou semana?
+          </div>
+          <div class="yn-group">
+            <button type="button" class="btn-yn sim" onclick="selectYN(this,'q4c','sim',[],[])">✔ Sim</button>
+            <button type="button" class="btn-yn nao" onclick="selectYN(this,'q4c','nao',[],[])">✘ Não</button>
+          </div>
+          <div class="upload-wrap" style="margin-top:16px">
+            <div class="upload-label">📎 Documento comprobatório</div>
+            <div class="upload-desc">Rotinas pedagógicas e/ou documento similar disponibilizado pela Secretaria Municipal de Educação</div>
+            <div class="upload-btn-wrap">
+              <button type="button" class="upload-btn" onclick="triggerUpload('upload4c')">📂 Selecionar PDF</button>
+              <input type="file" id="upload4c" class="upload-file-input" accept=".pdf" multiple onchange="handleFiles(this,'list4c')">
+              <span style="font-size:0.8rem;color:var(--texto-leve)">Somente arquivos .PDF</span>
+            </div>
+            <div class="upload-filelist" id="list4c"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===================== SEÇÃO 5 ===================== -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-number">5</span>
+        Formação Continuada dos Professores
+      </div>
+      <div class="section-body">
+
+        <!-- 5.a PLANILHA -->
+        <div class="question-block subitem" id="q5a">
+          <div class="alerta-planilha">
+            <div class="icone">📋</div>
+            <div class="texto">
+              <strong>Atenção – Planilha Indicadores (Aba 5A):</strong> Informe na <strong>aba 5A</strong> da planilha <strong>Indicadores</strong> a quantidade de atividades de formação continuada ofertadas pela Secretaria de Educação e o percentual de professores dos anos iniciais que participaram de pelo menos 1 atividade, por mês (base: ano de 2025).
+              <div class="alerta-confirmacao">
+                <input type="checkbox" id="check5a" onchange="updateProgress()">
+                <label for="check5a">Já preenchi a aba 5A da planilha Indicadores</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5.b -->
+        <div class="question-block" id="q5b">
+          <div class="question-label">
+            <span class="question-code">5.b</span>
+            A Secretaria Municipal da Educação possui um calendário de atividades de formação continuada a serem ofertadas aos professores da rede municipal no ano de 2026?
+          </div>
+          <div class="yn-group">
+            <button type="button" class="btn-yn sim" onclick="selectYN(this,'q5b','sim',[],[])">✔ Sim</button>
+            <button type="button" class="btn-yn nao" onclick="selectYN(this,'q5b','nao',[],[])">✘ Não</button>
+          </div>
+          <div class="upload-wrap" style="margin-top:16px">
+            <div class="upload-label">📎 Documento comprobatório</div>
+            <div class="upload-desc">Calendário de atividades de formação continuada</div>
+            <div class="upload-btn-wrap">
+              <button type="button" class="upload-btn" onclick="triggerUpload('upload5b')">📂 Selecionar PDF</button>
+              <input type="file" id="upload5b" class="upload-file-input" accept=".pdf" multiple onchange="handleFiles(this,'list5b')">
+              <span style="font-size:0.8rem;color:var(--texto-leve)">Somente arquivos .PDF</span>
+            </div>
+            <div class="upload-filelist" id="list5b"></div>
+          </div>
+        </div>
+
+        <!-- 5.c -->
+        <div class="question-block" id="q5c">
+          <div class="question-label">
+            <span class="question-code">5.c</span>
+            A Secretaria Municipal da Educação disponibiliza um banco com sugestões de planos de aula aos professores?
+            <span class="cond-tag cond-sim">SIM → 5.c.1 / 5.c.2</span>
+            <span class="cond-tag cond-nao">NÃO → 6.a</span>
+          </div>
+          <div class="yn-group">
+            <button type="button" class="btn-yn sim" onclick="selectYN(this,'q5c','sim',['q5c1','q5c2'],[''])">✔ Sim</button>
+            <button type="button" class="btn-yn nao" onclick="selectYN(this,'q5c','nao',[''],['q5c1','q5c2'])">✘ Não</button>
+          </div>
+        </div>
+
+        <!-- 5.c.1 -->
+        <div class="question-block hidden" id="q5c1">
+          <div class="question-label">
+            <span class="question-code">5.c.1</span>
+            Esses planos de aula são produto das atividades de formação continuada?
+          </div>
+          <div class="yn-group">
+            <button type="button" class="btn-yn sim" onclick="selectYN(this,'q5c1','sim',[],[])">✔ Sim</button>
+            <button type="button" class="btn-yn nao" onclick="selectYN(this,'q5c1','nao',[],[])">✘ Não</button>
+          </div>
+        </div>
+
+        <!-- 5.c.2 -->
+        <div class="question-block hidden" id="q5c2">
+          <div class="question-label">
+            <span class="question-code">5.c.2</span>
+            Eles estão organizados conforme os objetivos de aprendizagem esperados por período letivo?
+          </div>
+          <div class="yn-group">
+            <button type="button" class="btn-yn sim" onclick="selectYN(this,'q5c2','sim',[],[])">✔ Sim</button>
+            <button type="button" class="btn-yn nao" onclick="selectYN(this,'q5c2','nao',[],[])">✘ Não</button>
+          </div>
+          <div class="upload-wrap" style="margin-top:16px">
+            <div class="upload-label">📎 Documento comprobatório</div>
+            <div class="upload-desc">Link para o banco de planos de aulas (se houver — também pode ser anexado em PDF)</div>
+            <div style="margin-bottom:10px">
+              <input type="url" id="link5c2" placeholder="https://..." style="width:100%;padding:8px 12px;border:2px solid var(--cinza-borda);border-radius:6px;font-size:0.92rem;font-family:'Source Sans 3',sans-serif;background:var(--cinza-bg);color:var(--texto)">
+            </div>
+            <div class="upload-btn-wrap">
+              <button type="button" class="upload-btn" onclick="triggerUpload('upload5c2')">📂 Selecionar PDF</button>
+              <input type="file" id="upload5c2" class="upload-file-input" accept=".pdf" multiple onchange="handleFiles(this,'list5c2')">
+              <span style="font-size:0.8rem;color:var(--texto-leve)">Somente arquivos .PDF</span>
+            </div>
+            <div class="upload-filelist" id="list5c2"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===================== SEÇÃO 6 ===================== -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-number">6</span>
+        Acompanhamento Individualizado da Trajetória Acadêmica e das Faltas dos Alunos
+      </div>
+      <div class="section-body">
+
+        <!-- 6.a -->
+        <div class="question-block" id="q6a">
+          <div class="question-label">
+            <span class="question-code">6.a</span>
+            A Secretaria Municipal da Educação disponibiliza modelos de fichas avaliativas – organizadas por descritores – para realizar o acompanhamento individualizado do aprendizado dos alunos?
+            <span class="cond-tag cond-sim">SIM → 6.a.1</span>
+            <span class="cond-tag cond-nao">NÃO → 6.b</span>
+          </div>
+          <div class="yn-group">
+            <button type="button" class="btn-yn sim" onclick="selectYN(this,'q6a','sim',['q6a1'],['q6b','q6c'])">✔ Sim</button>
+            <button type="button" class="btn-yn nao" onclick="selectYN(this,'q6a','nao',['q6b','q6c'],['q6a1'])">✘ Não</button>
+          </div>
+        </div>
+
+        <!-- 6.a.1 -->
+        <div class="question-block hidden" id="q6a1">
+          <div class="question-label">
+            <span class="question-code">6.a.1</span>
+            Esse processo está normatizado?
+          </div>
+          <div class="yn-group">
+            <button type="button" class="btn-yn sim" onclick="selectYN(this,'q6a1','sim',[],[])">✔ Sim</button>
+            <button type="button" class="btn-yn nao" onclick="selectYN(this,'q6a1','nao',[],[])">✘ Não</button>
+          </div>
+          <div class="upload-wrap" style="margin-top:16px">
+            <div class="upload-label">📎 Documentos comprobatórios</div>
+            <div class="upload-desc">(i) Modelo de ficha avaliativa organizada por descritores; e (ii) ato normativo sobre o tema em questão, se houver</div>
+            <div class="upload-btn-wrap">
+              <button type="button" class="upload-btn" onclick="triggerUpload('upload6a1')">📂 Selecionar PDF(s)</button>
+              <input type="file" id="upload6a1" class="upload-file-input" accept=".pdf" multiple onchange="handleFiles(this,'list6a1')">
+              <span style="font-size:0.8rem;color:var(--texto-leve)">Somente arquivos .PDF</span>
+            </div>
+            <div class="upload-filelist" id="list6a1"></div>
+          </div>
+        </div>
+
+        <!-- 6.b PLANILHA -->
+        <div class="question-block subitem hidden" id="q6b">
+          <div class="alerta-planilha">
+            <div class="icone">📋</div>
+            <div class="texto">
+              <strong>Atenção – Planilha Indicadores (Aba 6B):</strong> Informe na <strong>aba 6B</strong> da planilha <strong>Indicadores</strong> a quantidade total de alunos e a quantidade cujo aprendizado é acompanhado por ficha avaliativa organizada por descritores, por ano/série dos anos iniciais (base: 2º semestre de 2025). <em>Não se confunde com o parecer descritivo do 1º ano.</em>
+              <div class="alerta-confirmacao">
+                <input type="checkbox" id="check6b" onchange="updateProgress()">
+                <label for="check6b">Já preenchi a aba 6B da planilha Indicadores</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6.c PLANILHA -->
+        <div class="question-block subitem hidden" id="q6c">
+          <div class="alerta-planilha">
+            <div class="icone">📋</div>
+            <div class="texto">
+              <strong>Atenção – Planilha Indicadores (Aba 6C):</strong> Informe na <strong>aba 6C</strong> da planilha <strong>Indicadores</strong> a taxa média de frequência escolar dos alunos dos anos iniciais do ensino fundamental, por escola (base: 2º semestre de 2025).
+              <div class="alerta-confirmacao">
+                <input type="checkbox" id="check6c" onchange="updateProgress()">
+                <label for="check6c">Já preenchi a aba 6C da planilha Indicadores</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===================== SEÇÃO 7 ===================== -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-number">7</span>
+        Oferta de Atividades de Reforço Escolar (Recomposição de Aprendizagem)
+      </div>
+      <div class="section-body">
+
+        <!-- 7.a PLANILHA -->
+        <div class="question-block subitem" id="q7a">
+          <div class="alerta-planilha">
+            <div class="icone">📋</div>
+            <div class="texto">
+              <strong>Atenção – Planilha Indicadores (Aba 7A):</strong> Informe na <strong>aba 7A</strong> da planilha <strong>Indicadores</strong> a quantidade de alunos dos anos iniciais que realizou atividades de reforço escolar/recomposição de aprendizagem no contraturno, por escola, por semestre (base: 1º e 2º semestres de 2025).
+              <div class="alerta-confirmacao">
+                <input type="checkbox" id="check7a" onchange="updateProgress()">
+                <label for="check7a">Já preenchi a aba 7A da planilha Indicadores</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7.b PLANILHA -->
+        <div class="question-block subitem" id="q7b">
+          <div class="alerta-planilha">
+            <div class="icone">📋</div>
+            <div class="texto">
+              <strong>Atenção – Planilha Indicadores (Aba 7B):</strong> Informe na <strong>aba 7B</strong> da planilha <strong>Indicadores</strong> a quantidade de alunos matriculados em tempo integral e/ou jornada ampliada, por escola, por semestre (base: 1º semestre de 2026).
+              <div class="alerta-confirmacao">
+                <input type="checkbox" id="check7b" onchange="updateProgress()">
+                <label for="check7b">Já preenchi a aba 7B da planilha Indicadores</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7.c -->
+        <div class="question-block" id="q7c">
+          <div class="question-label">
+            <span class="question-code">7.c</span>
+            A Secretaria Municipal da Educação pretende expandir a oferta de reforço escolar no contraturno, a jornada ampliada e o ensino em tempo integral nos anos iniciais do ensino fundamental no 1º semestre de 2026?
+            <span class="cond-tag cond-sim">SIM → 7.c.1</span>
+            <span class="cond-tag cond-nao">NÃO → 7.d</span>
+          </div>
+          <div class="yn-group">
+            <button type="button" class="btn-yn sim" onclick="selectYN(this,'q7c','sim',['q7c1'],['q7d'])">✔ Sim</button>
+            <button type="button" class="btn-yn nao" onclick="selectYN(this,'q7c','nao',['q7d'],['q7c1'])">✘ Não</button>
+          </div>
+        </div>
+
+        <!-- 7.c.1 -->
+        <div class="question-block hidden" id="q7c1">
+          <div class="question-label">
+            <span class="question-code">7.c.1</span>
+            Discrimine a situação por escola da rede municipal de ensino.
+          </div>
+          <div class="open-text-wrap">
+            <textarea placeholder="Descreva a expansão prevista por escola..."></textarea>
+          </div>
+          <div class="upload-wrap" style="margin-top:16px">
+            <div class="upload-label">📎 Documento comprobatório</div>
+            <div class="upload-desc">Resposta por escrito à pergunta acima</div>
+            <div class="upload-btn-wrap">
+              <button type="button" class="upload-btn" onclick="triggerUpload('upload7c1')">📂 Selecionar PDF</button>
+              <input type="file" id="upload7c1" class="upload-file-input" accept=".pdf" multiple onchange="handleFiles(this,'list7c1')">
+              <span style="font-size:0.8rem;color:var(--texto-leve)">Somente arquivos .PDF</span>
+            </div>
+            <div class="upload-filelist" id="list7c1"></div>
+          </div>
+        </div>
+
+        <!-- 7.d -->
+        <div class="question-block hidden" id="q7d">
+          <div class="question-label">
+            <span class="question-code">7.d</span>
+            A Secretaria Municipal da Educação possui norma que regulamente a oferta de reforço escolar (atividades de recomposição de aprendizagem) dos alunos do ensino fundamental?
+          </div>
+          <div class="yn-group">
+            <button type="button" class="btn-yn sim" onclick="selectYN(this,'q7d','sim',[],[])">✔ Sim</button>
+            <button type="button" class="btn-yn nao" onclick="selectYN(this,'q7d','nao',[],[])">✘ Não</button>
+          </div>
+          <div class="upload-wrap" style="margin-top:16px">
+            <div class="upload-label">📎 Documento comprobatório</div>
+            <div class="upload-desc">Ato normativo sobre o tema em questão</div>
+            <div class="upload-btn-wrap">
+              <button type="button" class="upload-btn" onclick="triggerUpload('upload7d')">📂 Selecionar PDF</button>
+              <input type="file" id="upload7d" class="upload-file-input" accept=".pdf" multiple onchange="handleFiles(this,'list7d')">
+              <span style="font-size:0.8rem;color:var(--texto-leve)">Somente arquivos .PDF</span>
+            </div>
+            <div class="upload-filelist" id="list7d"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===================== SEÇÃO 8 ===================== -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-number">8</span>
+        Oferta de Alimentação Escolar
+      </div>
+      <div class="section-body">
+
+        <!-- 8.a PLANILHA -->
+        <div class="question-block subitem" id="q8a">
+          <div class="alerta-planilha">
+            <div class="icone">📋</div>
+            <div class="texto">
+              <strong>Atenção – Planilha Indicadores (Aba 8A):</strong> Informe na <strong>aba 8A</strong> da planilha <strong>Indicadores</strong> a quantidade de alunos por turno e se é ofertada alimentação/lanche antes do início das aulas, por escola, por semestre (base: 2º semestre de 2025 e 1º semestre de 2026).
+              <div class="alerta-confirmacao">
+                <input type="checkbox" id="check8a" onchange="updateProgress()">
+                <label for="check8a">Já preenchi a aba 8A da planilha Indicadores</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8.b -->
+        <div class="question-block" id="q8b">
+          <div class="question-label">
+            <span class="question-code">8.b</span>
+            A Secretaria Municipal da Educação pretende expandir a oferta de alimentação escolar antes do início das aulas nos anos iniciais do ensino fundamental no 1º semestre de 2026?
+            <span class="cond-tag cond-sim">SIM → 8.b.1</span>
+            <span class="cond-tag cond-nao">NÃO → 9.a</span>
+          </div>
+          <div class="yn-group">
+            <button type="button" class="btn-yn sim" onclick="selectYN(this,'q8b','sim',['q8b1'],[''])">✔ Sim</button>
+            <button type="button" class="btn-yn nao" onclick="selectYN(this,'q8b','nao',[''],['q8b1'])">✘ Não</button>
+          </div>
+        </div>
+
+        <!-- 8.b.1 -->
+        <div class="question-block hidden" id="q8b1">
+          <div class="question-label">
+            <span class="question-code">8.b.1</span>
+            Discrimine a situação por escola da rede municipal de ensino.
+          </div>
+          <div class="open-text-wrap">
+            <textarea placeholder="Descreva a expansão prevista por escola..."></textarea>
+          </div>
+          <div class="upload-wrap" style="margin-top:16px">
+            <div class="upload-label">📎 Documento comprobatório</div>
+            <div class="upload-desc">Resposta por escrito à pergunta acima</div>
+            <div class="upload-btn-wrap">
+              <button type="button" class="upload-btn" onclick="triggerUpload('upload8b1')">📂 Selecionar PDF</button>
+              <input type="file" id="upload8b1" class="upload-file-input" accept=".pdf" multiple onchange="handleFiles(this,'list8b1')">
+              <span style="font-size:0.8rem;color:var(--texto-leve)">Somente arquivos .PDF</span>
+            </div>
+            <div class="upload-filelist" id="list8b1"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===================== SEÇÃO 9 ===================== -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-number">9</span>
+        Condições de Trabalho e Aprendizagem das Salas de Aula
+      </div>
+      <div class="section-body">
+
+        <!-- 9.a PLANILHA -->
+        <div class="question-block subitem" id="q9a">
+          <div class="alerta-planilha">
+            <div class="icone">📋</div>
+            <div class="texto">
+              <strong>Atenção – Planilha Indicadores (Aba 9A):</strong> Informe na <strong>aba 9A</strong> da planilha <strong>Indicadores</strong> as turmas multisseriadas (se houver) dos anos iniciais do ensino fundamental, com os respectivos anos/séries atendidos simultaneamente, quantidade de alunos matriculados e escolas onde estão localizadas no 1º semestre de 2026.
+              <div class="alerta-confirmacao">
+                <input type="checkbox" id="check9a" onchange="updateProgress()">
+                <label for="check9a">Já preenchi a aba 9A da planilha Indicadores</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 9.b PLANILHA -->
+        <div class="question-block subitem" id="q9b">
+          <div class="alerta-planilha">
+            <div class="icone">📋</div>
+            <div class="texto">
+              <strong>Atenção – Planilha Indicadores (Aba 9B):</strong> Informe na <strong>aba 9B</strong> da planilha <strong>Indicadores</strong> a quantidade média de alunos nas turmas dos anos iniciais, por ano/série, por escola, no 1º semestre de 2026.
+              <div class="alerta-confirmacao">
+                <input type="checkbox" id="check9b" onchange="updateProgress()">
+                <label for="check9b">Já preenchi a aba 9B da planilha Indicadores</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 9.c PLANILHA -->
+        <div class="question-block subitem" id="q9c">
+          <div class="alerta-planilha">
+            <div class="icone">📋</div>
+            <div class="texto">
+              <strong>Atenção – Planilha Indicadores (Aba 9C):</strong> Informe na <strong>aba 9C</strong> da planilha <strong>Indicadores</strong> a quantidade de salas de aula (1° ao 5° ano) com ar-condicionado e a quantidade de alunos que estudam nelas, por escola, no 1º semestre de 2026. <em>Desconsiderar espaços de uso coletivo ou reservados exclusivamente aos profissionais da educação.</em>
+              <div class="alerta-confirmacao">
+                <input type="checkbox" id="check9c" onchange="updateProgress()">
+                <label for="check9c">Já preenchi a aba 9C da planilha Indicadores</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===================== SEÇÃO 10 ===================== -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-number">10</span>
+        Gestão Escolar
+      </div>
+      <div class="section-body">
+
+        <!-- 10.a PLANILHA -->
+        <div class="question-block subitem" id="q10a">
+          <div class="alerta-planilha">
+            <div class="icone">📋</div>
+            <div class="texto">
+              <strong>Atenção – Planilha Indicadores (Aba 10A):</strong> Informe na <strong>aba 10A</strong> da planilha <strong>Indicadores</strong> as quantidades de alunos e de coordenadores pedagógicos, por escola que oferte anos iniciais do ensino fundamental, por semestre (base: 1º semestre de 2026).
+              <div class="alerta-confirmacao">
+                <input type="checkbox" id="check10a" onchange="updateProgress()">
+                <label for="check10a">Já preenchi a aba 10A da planilha Indicadores</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 10.b -->
+        <div class="question-block" id="q10b">
+          <div class="question-label">
+            <span class="question-code">10.b</span>
+            A Secretaria Municipal da Educação possui um calendário de atividades de formação continuada específicas para diretores e coordenadores pedagógicos no ano de 2025?
+          </div>
+          <div class="yn-group">
+            <button type="button" class="btn-yn sim" onclick="selectYN(this,'q10b','sim',[],[])">✔ Sim</button>
+            <button type="button" class="btn-yn nao" onclick="selectYN(this,'q10b','nao',[],[])">✘ Não</button>
+          </div>
+          <div class="upload-wrap" style="margin-top:16px">
+            <div class="upload-label">📎 Documento comprobatório</div>
+            <div class="upload-desc">Calendário de atividades de formação continuada para diretores e coordenadores pedagógicos</div>
+            <div class="upload-btn-wrap">
+              <button type="button" class="upload-btn" onclick="triggerUpload('upload10b')">📂 Selecionar PDF</button>
+              <input type="file" id="upload10b" class="upload-file-input" accept=".pdf" multiple onchange="handleFiles(this,'list10b')">
+              <span style="font-size:0.8rem;color:var(--texto-leve)">Somente arquivos .PDF</span>
+            </div>
+            <div class="upload-filelist" id="list10b"></div>
+          </div>
+        </div>
+
+        <!-- 10.c PLANILHA -->
+        <div class="question-block subitem" id="q10c">
+          <div class="alerta-planilha">
+            <div class="icone">📋</div>
+            <div class="texto">
+              <strong>Atenção – Planilha Indicadores (Aba 10C):</strong> Informe na <strong>aba 10C</strong> da planilha <strong>Indicadores</strong> a quantidade de atividades/reuniões com pauta de formação continuada de gestores escolares (direção + coordenação pedagógica) e o percentual de gestores que participaram, por mês (base: ano de 2025).
+              <div class="alerta-confirmacao">
+                <input type="checkbox" id="check10c" onchange="updateProgress()">
+                <label for="check10c">Já preenchi a aba 10C da planilha Indicadores</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===================== ABA ESCOLAS ===================== -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-number">🏫</span>
+        Aba Escolas – Planilha Indicadores
+      </div>
+      <div class="section-body">
+        <div class="question-block subitem">
+          <div class="alerta-planilha">
+            <div class="icone">📋</div>
+            <div class="texto">
+              <strong>Atenção – Planilha Indicadores (Aba Escolas):</strong> Liste na aba <strong>Escolas</strong> da planilha <strong>Indicadores</strong> (enviada por e-mail) todas as escolas da rede municipal de ensino que ofertam séries dos anos iniciais do ensino fundamental, com os respectivos endereços.
+              <div class="alerta-confirmacao">
+                <input type="checkbox" id="checkEscolas" onchange="updateProgress()">
+                <label for="checkEscolas">Já preenchi a aba Escolas da planilha Indicadores</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER / ENVIO -->
+    <div class="form-footer">
+      <button type="button" class="btn-submit" onclick="submitForm()">
+        📤 &nbsp;Enviar Questionário
+      </button>
+      <p>Verifique se todas as perguntas foram respondidas e todos os documentos foram anexados antes de enviar.</p>
+    </div>
+
+  </form>
+</main>
+
+<!-- MODAL SUCESSO -->
+<div class="modal-overlay" id="modalSuccess">
+  <div class="modal-box">
+    <div class="modal-icon">✅</div>
+    <div class="modal-title">Questionário enviado com sucesso!</div>
+    <div class="modal-text">As respostas foram salvas na planilha e os documentos enviados ao Google Drive do TCE-PB.</div>
+    <div style="display:flex;gap:12px;justify-content:center;margin-bottom:18px;flex-wrap:wrap">
+      <a id="linkSheet" href="#" target="_blank" style="padding:8px 18px;background:#1a6b3c;color:#fff;border-radius:6px;text-decoration:none;font-weight:700;font-size:0.88rem">📊 Ver Planilha</a>
+      <a id="linkDrive" href="#" target="_blank" style="padding:8px 18px;background:#003366;color:#fff;border-radius:6px;text-decoration:none;font-weight:700;font-size:0.88rem">📁 Ver no Drive</a>
+    </div>
+    <button class="modal-btn" onclick="document.getElementById('modalSuccess').classList.remove('active')">Fechar</button>
+  </div>
+</div>
+
+<script>
+// ============================================================
+//  YES/NO LOGIC
+// ============================================================
+function selectYN(btn, questionId, value, showIds, hideIds) {
+  const block = document.getElementById(questionId);
+  block.querySelectorAll('.btn-yn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+
+  showIds.forEach(id => {
+    if (id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.remove('hidden');
+        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+  });
+
+  hideIds.forEach(id => {
+    if (id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('hidden');
+    }
+  });
+
+  updateProgress();
+}
+
+// ============================================================
+//  FILE UPLOAD
+// ============================================================
+function triggerUpload(inputId) {
+  document.getElementById(inputId).click();
+}
+
+function handleFiles(input, listId) {
+  const list = document.getElementById(listId);
+  if (!window.fileStore[input.id]) window.fileStore[input.id] = [];
+
+  Array.from(input.files).forEach(file => {
+    if (!file.name.toLowerCase().endsWith('.pdf')) {
+      alert('⚠️ Apenas arquivos PDF são permitidos.\n\nArquivo rejeitado: ' + file.name);
+      return;
+    }
+    window.fileStore[input.id].push(file);
+    const item = document.createElement('div');
+    item.className = 'upload-file-item';
+    item.dataset.filename = file.name;
+    item.innerHTML = `<span>📄</span><span>${file.name}</span><button class="remove-file" title="Remover" onclick="removeFile('${input.id}','${file.name}',this)">×</button>`;
+    list.appendChild(item);
+  });
+  input.value = '';
+  updateProgress();
+}
+
+function removeFile(inputId, filename, btn) {
+  window.fileStore[inputId] = (window.fileStore[inputId] || []).filter(f => f.name !== filename);
+  btn.parentElement.remove();
+}
+
+// ============================================================
+//  PROGRESS BAR
+// ============================================================
+function updateProgress() {
+  const totalQ = document.querySelectorAll('.question-block:not(.subitem):not(.hidden) .yn-group').length;
+  const answeredQ = document.querySelectorAll('.question-block:not(.subitem):not(.hidden) .btn-yn.selected').length;
+  const totalChecks = document.querySelectorAll('.alerta-confirmacao input[type=checkbox]').length;
+  const checkedChecks = document.querySelectorAll('.alerta-confirmacao input[type=checkbox]:checked').length;
+
+  const total = totalQ + totalChecks;
+  const done = answeredQ + checkedChecks;
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+// ============================================================
+//  CONFIGURAÇÃO — cole aqui a URL gerada pelo Apps Script
+// ============================================================
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwJWJQJ6monCEjWSmLEHcZDLW5ZwsKqzY0_60P2fs5BXAtjN848I6G9nqBl1_K0DteN/exec';
+
+// ============================================================
+//  COLETA DE RESPOSTAS
+// ============================================================
+function collectAnswers() {
+  const answers = {};
+
+  // Botões SIM/NÃO
+  document.querySelectorAll('.question-block:not(.subitem)').forEach(block => {
+    const id = block.id;
+    if (!id) return;
+    const selected = block.querySelector('.btn-yn.selected');
+    answers[id] = selected ? selected.textContent.trim() : 'Não respondido';
+
+    // textarea livre (ex: 1.b.1, 7.c.1, 8.b.1)
+    const ta = block.querySelector('textarea');
+    if (ta && ta.value.trim()) answers[id + '_texto'] = ta.value.trim();
+
+    // link (ex: 5.c.2)
+    const lnk = block.querySelector('input[type=url]');
+    if (lnk && lnk.value.trim()) answers[id + '_link'] = lnk.value.trim();
+  });
+
+  // Checkboxes de planilha
+  document.querySelectorAll('.alerta-confirmacao input[type=checkbox]').forEach(cb => {
+    answers['planilha_' + cb.id] = cb.checked ? 'Confirmado' : 'Pendente';
+  });
+
+  return answers;
+}
+
+// ============================================================
+//  COLETA DE ARQUIVOS PDF (base64)
+// ============================================================
+async function collectFiles() {
+  const fileInputs = document.querySelectorAll('.upload-file-input');
+  const files = [];
+  for (const input of fileInputs) {
+    // Ler arquivos do input original — usamos o fileStore
+  }
+  // Usamos fileStore global para rastrear arquivos por inputId
+  const result = [];
+  for (const [inputId, fileList] of Object.entries(window.fileStore || {})) {
+    for (const file of fileList) {
+      const base64 = await toBase64(file);
+      result.push({ inputId, name: file.name, base64 });
+    }
+  }
+  return result;
+}
+
+function toBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+// ============================================================
+//  SUBMIT
+// ============================================================
+async function submitForm() {
+  // Validações
+  const unanswered = document.querySelectorAll('.question-block:not(.subitem):not(.hidden) .yn-group').length -
+                     document.querySelectorAll('.question-block:not(.subitem):not(.hidden) .btn-yn.selected').length;
+  if (unanswered > 0) {
+    alert(`⚠️ Ainda existem ${unanswered} pergunta(s) sem resposta.\n\nPor favor, responda todas antes de enviar.`);
+    return;
+  }
+  const unchecked = document.querySelectorAll('.alerta-confirmacao input[type=checkbox]:not(:checked)').length;
+  if (unchecked > 0) {
+    alert(`⚠️ Existem ${unchecked} aba(s) da planilha Indicadores não confirmadas.\n\nConfirme todas antes de enviar.`);
+    return;
+  }
+  if (APPS_SCRIPT_URL === 'COLE_AQUI_A_URL_DO_APPS_SCRIPT') {
+    alert('⚙️ Configure a URL do Apps Script no arquivo HTML antes de enviar.\n\nConsulte o guia de integração.');
+    return;
+  }
+
+  // UI de carregamento
+  const btn = document.querySelector('.btn-submit');
+  btn.disabled = true;
+  btn.textContent = '⏳ Enviando...';
+
+  try {
+    const answers  = collectAnswers();
+    const files    = await collectFiles();
+    const municipio = document.getElementById('municipioInput')?.value?.trim() || '';
+
+    const payload = {
+      municipio,
+      dataEnvio: new Date().toLocaleString('pt-BR'),
+      respostas: answers,
+      arquivos: files
+    };
+
+    const resp = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+
+    const result = await resp.json();
+    if (result.status === 'ok') {
+      document.getElementById('modalSuccess').classList.add('active');
+      if (result.sheetUrl)  document.getElementById('linkSheet').href  = result.sheetUrl;
+      if (result.folderUrl) document.getElementById('linkDrive').href  = result.folderUrl;
+    } else {
+      throw new Error(result.message || 'Erro desconhecido');
+    }
+  } catch (e) {
+    alert('❌ Erro ao enviar: ' + e.message + '\n\nVerifique sua conexão e tente novamente.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '📤  Enviar Questionário';
+  }
+}
+
+// ============================================================
+//  FILE STORE — rastreia arquivos por inputId
+// ============================================================
+window.fileStore = {};
+
+// init
+updateProgress();
+</script>
+</body>
+</html>
